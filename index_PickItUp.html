@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>PickItUp</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link href="styles.css" rel="stylesheet" type="text/css">
+	</head>
+<body>
+	<div>
+		 <h2>PickItUp</h2>
+         <h4>Item:</h4><input type="text" id="listItem"><br>
+         <h4>Section:</h4><input type="text" id="section"><br><br>
+		<button id="addToList">Add to List</button>
+	</div>
+	<div id="object" contenteditable="true">
+		<table id="sortList" style="border: 1px">
+			<tr>
+				<h3>Your Table</h3>
+				<th>
+					List Item
+				</th>
+				<th>
+					Section
+				</th>
+				<th>Delete Item</th>
+			</tr>
+		</table>
+		<table id="listValues"  ></table><br>
+	</div>
+		
+</body>
+	
+	
+	<script>
+	var list = [];
+	
+		$(document).ready(function(){
+			
+			$("#addToList").on("click", addToArray);
+			
+			$("td:contains(X)").click(function(){
+				deleteRow(event.target.id);
+			})
+			
+			$("#normal").addClass("selected");
+
+			$("#normal").on("click", function(e){
+				addClasses('normal');
+				e.stopPropagation();
+			});
+			$("#bigger").on("click", function(e){
+				addClasses('bigger');
+				e.stopPropagation();
+			});
+			$("#smaller").on("click", function(e){
+				addClasses('smaller');
+				e.stopPropagation();
+			});
+			
+			$("#controller").on("click", function(){
+				$("#buttons").toggle("slow");
+			});
+			
+			var triggers = {
+				N: "normal",
+				B: "bigger",
+				S: "smaller",
+				T: "controller"
+  			};
+			
+			$(document).keyup(function(event){
+				var key = String.fromCharCode(event.keyCode);
+				if (key in triggers){
+					$('#'+ triggers[key]).click();
+				}
+			})
+			
+			
+		})
+			
+		
+		// if the list is not equal to null
+		// set the list to the value being converted from local storage
+		// onload make the list with the list value passed into it
+		if(JSON.parse(window.localStorage.getItem("theList")) !== null){
+			list = JSON.parse(window.localStorage.getItem("theList"));
+			window.onload = generateListElements(list);
+		}
+	
+		function addToArray(){
+			$("listValues").empty();
+			var itemInput = $("#listItem").val();
+			var listSection = $("#section").val();
+			
+			var listed = new Object;
+			listed.itemInput = itemInput;
+			listed.listSection = listSection;
+
+			//add the element to the table
+			addNewListItem(listed);
+
+			//add to the list array
+			list.push(listed);
+
+			// update local storage
+			window.localStorage.setItem("theList",JSON.stringify(list));
+		}
+		
+		function generateListElements(list){
+			for (let i = 0; i < list.length; i++){
+				addNewListItem(list[i], i);
+			}
+		}
+
+		// add a new element. if the 2nd option isnt passed, make i equal to the list length
+		function addNewListItem(listItem, i = list.length){
+			$("#listValues").append("<tr id='row'></tr>");
+			$("#row").append( '<td>' + listItem.itemInput + '</td>');
+			$("#row").append( '<td>' + listItem.listSection + '</td>');
+			$("#row").append('<td>X</td>').attr("id", i).click(function(){
+				deleteRow(i);
+			})
+		}
+
+		function deleteRow(i) {
+			$('#' + i).remove()
+			list.splice(i, 1);
+			window.localStorage.setItem("theList",JSON.stringify(list));
+		}
+		
+		function addClasses(classToChange){
+			$("#listValues").removeClass("smaller");
+			$("#listValues").removeClass("bigger");
+			$("#listValues").removeClass("normal");
+			$("span").removeClass("selected");
+			$("#normal").removeClass("selected");
+			$("#smaller").removeClass("selected");
+			$("#bigger").removeClass("selected");
+
+			if(classToChange === 'bigger'){
+				$("#bigger").addClass("selected");
+				$("#listValues").addClass("bigger");
+			}
+
+			if(classToChange === 'smaller'){
+				$("#listValues").addClass("smaller");
+				$("#smaller").addClass("selected");
+			}
+
+			if(classToChange === 'normal'){
+				$("#listValues").addClass("normal");
+				$("#normal").addClass("selected");
+			}
+		}
+</script>
+</html>
