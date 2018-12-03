@@ -3,6 +3,7 @@
 body{
 	background-color: #BFBFBF;
 	padding: 20px;
+	font-size: 20px;
 }
 ul {
     list-style-type: none;
@@ -56,10 +57,26 @@ input[type=submit] {
 input[type=submit]:hover {
     background-color: #45a049;
 }
-
-.container {
+p{
+	width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+	background-color: white;
+	font-size: 20px;
+}
+#personal {
+    font-size: 38px;
+	float: left;
+	padding-left: 55px;
     
-    
+}
+#paragraph{
+	font-size: 20px;
 }
 #info{
 	padding-bottom: 10px;
@@ -72,17 +89,7 @@ input[type=submit]:hover {
 	width: 150px;
 	height: 75px;
 }
-p{
-	width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    margin-top: 6px;
-    margin-bottom: 16px;
-    resize: vertical;
-	background-color: white;
-}
+
 #details{
 	background-color: white;
 }
